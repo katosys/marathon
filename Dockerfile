@@ -2,7 +2,7 @@
 # Set the base image for subsequent instructions:
 #------------------------------------------------------------------------------
 
-FROM alpine:3.4
+FROM quay.io/kato/mesos:v1.0.1-1.10.3-1
 MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 
 #------------------------------------------------------------------------------
@@ -27,12 +27,6 @@ RUN apk add -U --no-cache -t dev git openjdk8 \
     && mv $(find target -name 'marathon-assembly-*.jar' | sort | tail -1) . \
     && rm -rf target/* ~/.sbt ~/.ivy2 && mv marathon-assembly-*.jar target \
     && apk del --purge dev && rm -rf /var/cache/apk/* /tmp/* /marathon/.git
-
-#------------------------------------------------------------------------------
-# Populate root file system:
-#------------------------------------------------------------------------------
-
-# ADD rootfs /
 
 #------------------------------------------------------------------------------
 # Expose ports and entrypoint:
