@@ -16,13 +16,17 @@ ENV TAG="1.3.3" \
 # Install marathon:
 #------------------------------------------------------------------------------
 
-RUN apk add -U --no-cache -t dev git bash openjdk8 \
+RUN apk add -U --no-cache -t dev git openjdk8 \
+    && apk add -U --no-cache bash openjdk8-jre \
     && git clone https://github.com/mesosphere/marathon.git && cd marathon \
     && { [ "${TAG}" != "master" ] && git checkout tags/v${TAG} -b v${TAG}; }; \
     eval $(sed s/sbt.version/SBT_VERSION/ < project/build.properties) \
     && wget -P /usr/local/bin ${SBT_URL}/${SBT_VERSION}/sbt-launch.jar \
     && cp project/sbt /usr/local/bin && chmod +x /usr/local/bin/sbt \
-    && sbt -Dsbt.log.format=false assembly
+    && sbt -Dsbt.log.format=false assembly \
+    && mv $(find target -name 'marathon-assembly-*.jar' | sort | tail -1) . \
+    && rm -rf target/* ~/.sbt ~/.ivy2 && mv marathon-assembly-*.jar target \
+    && apk del --purge dev && rm -rf /var/cache/apk/* /tmp/* /marathon/.git
 
 #------------------------------------------------------------------------------
 # Populate root file system:
@@ -34,4 +38,5 @@ RUN apk add -U --no-cache -t dev git bash openjdk8 \
 # Expose ports and entrypoint:
 #------------------------------------------------------------------------------
 
-ENTRYPOINT ["/bin/sh"]
+WORKDIR /marathon
+ENTRYPOINT ["./bin/start"]
