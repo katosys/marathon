@@ -2,7 +2,7 @@
 # Set the base image for subsequent instructions:
 #------------------------------------------------------------------------------
 
-FROM quay.io/kato/mesos:v1.0.1-1.10.3-1
+FROM quay.io/kato/mesos-base:v1.0.1-1
 MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 
 #------------------------------------------------------------------------------
