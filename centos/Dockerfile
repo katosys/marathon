@@ -15,8 +15,7 @@ ENV VERSION="1.3.5"
 # Install mesos:
 #------------------------------------------------------------------------------
 
-RUN yum install -y marathon-${VERSION} \
-    && ln -s /proc/self/fd /dev/fd \
+RUN yum update -y && yum install -y marathon-${VERSION} \
     && yum clean all
 
 #------------------------------------------------------------------------------
