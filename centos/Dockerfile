@@ -9,7 +9,7 @@ MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 # Environment variables:
 #------------------------------------------------------------------------------
 
-ENV VERSION="1.3.5"
+ENV VERSION="1.3.6"
 
 #------------------------------------------------------------------------------
 # Install mesos:
