@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/glibc-compat/sbin/ldconfig \
+&& exec env LD_LIBRARY_PATH=/opt/lib /usr/bin/marathon "$@"
