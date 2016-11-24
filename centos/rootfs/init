@@ -1,4 +1,0 @@
-#!/bin/bash
-
-[ -h /dev/fd ] || ln -s /proc/self/fd /dev
-exec /usr/bin/marathon
