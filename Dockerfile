@@ -35,9 +35,7 @@ COPY rootfs /
 #------------------------------------------------------------------------------
 
 RUN ln -s /usr/glibc-compat/etc/ld.so.conf /etc/ \
-    && cp /etc/ld.so.conf /tmp \
-    && echo /opt/lib > /etc/ld.so.conf \
-    && cat /tmp/ld.so.conf >> /etc/ld.so.conf \
+    && echo /opt/lib >> /etc/ld.so.conf \
     && sed -i '/^RTLDLIST=/c\RTLDLIST=/usr/glibc-compat/lib/ld-linux-x86-64.so.2' \
     /usr/glibc-compat/bin/ldd
 
