@@ -16,7 +16,7 @@ ENV TAG="1.4.0-RC1" \
 # Install marathon:
 #------------------------------------------------------------------------------
 
-RUN apk add -U --no-cache -t dev git openssl perl && apk add -U --no-cache bash \
+RUN apk add -U --no-cache -t dev git openssl perl && apk add -U --no-cache bash grep \
     && git clone https://github.com/mesosphere/marathon.git && cd marathon \
     && { [ "${TAG}" != "master" ] && git checkout tags/v${TAG} -b build; }; \
     eval $(sed s/sbt.version/SBT_VERSION/ < project/build.properties) \
