@@ -9,14 +9,14 @@ MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 # Environment variables:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.3.6" \
+ENV TAG="1.4.0-RC1" \
     SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch"
 
 #------------------------------------------------------------------------------
 # Install marathon:
 #------------------------------------------------------------------------------
 
-RUN apk add -U --no-cache -t dev git openssl && apk add -U --no-cache bash \
+RUN apk add -U --no-cache -t dev git openssl perl && apk add -U --no-cache bash \
     && git clone https://github.com/mesosphere/marathon.git && cd marathon \
     && { [ "${TAG}" != "master" ] && git checkout tags/v${TAG} -b build; }; \
     eval $(sed s/sbt.version/SBT_VERSION/ < project/build.properties) \
