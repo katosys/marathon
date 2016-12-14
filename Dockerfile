@@ -9,7 +9,7 @@ MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 # Environment variables:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.4.0-RC1" \
+ENV TAG="1.4.0-RC3" \
     SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch"
 
 #------------------------------------------------------------------------------
@@ -25,8 +25,6 @@ RUN apk add -U --no-cache -t dev git openssl perl \
     && cp project/sbt /usr/local/bin && chmod +x /usr/local/bin/sbt
 
 RUN cd marathon \
-    && sed -i 's/$cmd/"${cmd[@]}"/' bin/marathon-framework \
-    && sed -i 's/$clean_cmd/"${clean_cmd[@]}"/' bin/marathon-framework \
     && sbt -Dsbt.log.format=false 'set test in assembly := {}' assembly \
     && ./bin/build-distribution && mv target/marathon-runnable.jar \
     /usr/bin/marathon && chmod +x /usr/bin/marathon
