@@ -9,7 +9,7 @@ MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 # Environment variables:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.4.0-RC3" \
+ENV TAG="1.4.0-RC7" \
     SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch"
 
 #------------------------------------------------------------------------------
