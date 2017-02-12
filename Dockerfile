@@ -26,7 +26,7 @@ RUN ln -s /usr/glibc-compat/etc/ld.so.conf /etc/ && echo /opt/lib >> /etc/ld.so.
 # Install marathon:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.4.0-RC7"
+ENV TAG="1.4.0-RC8"
 
 RUN apk add -U --no-cache -t dev git perl openjdk8 \
     && apk add -U --no-cache bash grep openjdk8-jre \
