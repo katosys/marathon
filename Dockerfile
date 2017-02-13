@@ -28,14 +28,26 @@ RUN ln -s /usr/glibc-compat/etc/ld.so.conf /etc/ \
     /usr/glibc-compat/bin/ldd && apk del glibc-i18n
 
 #------------------------------------------------------------------------------
+# Install Oracle Java 8:
+#------------------------------------------------------------------------------
+
+ENV JAVA_HOME="/opt/jdk" \
+    PATH="${PATH}:/opt/jdk/bin" \
+    JAVA_URL="http://download.oracle.com/otn-pub/java/jdk"
+
+RUN apk add -U --no-cache -t dev curl && mkdir /opt \
+    && curl -sLH 'Cookie: oraclelicense=accept-securebackup-cookie' \
+    ${JAVA_URL}/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jdk-8u121-linux-x64.tar.gz \
+    | tar zx -C /opt && mv /opt/jdk1.8.0_121 ${JAVA_HOME}
+
+#------------------------------------------------------------------------------
 # Install marathon:
 #------------------------------------------------------------------------------
 
 ENV TAG="1.4.0-RC8" \
-    SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch" \
+    SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch"
 
-RUN apk add -U --no-cache -t dev git perl openjdk8 \
-    && apk add -U --no-cache bash grep openjdk8-jre \
+RUN apk add -U --no-cache -t dev git perl && apk add -U --no-cache bash grep \
     && git clone https://github.com/mesosphere/marathon.git && cd marathon \
     && { [ "${TAG}" != "master" ] && git checkout tags/v${TAG} -b build; }; \
     eval $(sed s/sbt.version/SBT_VERSION/ < project/build.properties) \
