@@ -9,24 +9,30 @@ MAINTAINER Marc Villacorta Morera <marc.villacorta@gmail.com>
 # Install glibc:
 #------------------------------------------------------------------------------
 
-ENV SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch" \
+ENV GLIBC_VERSION="2.25-r0" \
     RSA_URL="https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master" \
-    APK_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.23-r3"
+    APK_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download"
 
 RUN apk add -U --no-cache -t dev ca-certificates libressl \
-    && wget -q -O /etc/apk/keys/sgerrand.rsa.pub ${RSA_URL}/sgerrand.rsa.pub \
-    && wget ${APK_URL}/glibc-2.23-r3.apk && wget ${APK_URL}/glibc-bin-2.23-r3.apk \
+    && wget -q ${APK_URL}/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+    && wget -q ${APK_URL}/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk \
+    && wget -q ${APK_URL}/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk \
+    && wget -qO /etc/apk/keys/sgerrand.rsa.pub ${RSA_URL}/sgerrand.rsa.pub \
     && apk add --no-cache *.apk && rm /etc/apk/keys/sgerrand.rsa.pub *.apk
 
-RUN ln -s /usr/glibc-compat/etc/ld.so.conf /etc/ && echo /opt/lib >> /etc/ld.so.conf \
+RUN ln -s /usr/glibc-compat/etc/ld.so.conf /etc/ \
+    && echo '/opt/lib' >> /etc/ld.so.conf \
+    && echo 'export LANG=en_US.UTF-8' > /etc/profile.d/locale.sh \
+    && /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 en_US.UTF-8 \
     && sed -i '/^RTLDLIST=/c\RTLDLIST=/usr/glibc-compat/lib/ld-linux-x86-64.so.2' \
-    /usr/glibc-compat/bin/ldd
+    /usr/glibc-compat/bin/ldd && apk del glibc-i18n
 
 #------------------------------------------------------------------------------
 # Install marathon:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.4.0-RC8"
+ENV TAG="1.4.0-RC8" \
+    SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch" \
 
 RUN apk add -U --no-cache -t dev git perl openjdk8 \
     && apk add -U --no-cache bash grep openjdk8-jre \
