@@ -28,7 +28,7 @@ RUN ln -s /usr/glibc-compat/etc/ld.so.conf /etc/ \
     /usr/glibc-compat/bin/ldd && apk del glibc-i18n
 
 #------------------------------------------------------------------------------
-# Install Oracle Java 8:
+# Install Oracle JDK 8:
 #------------------------------------------------------------------------------
 
 ENV JAVA_HOME="/opt/jdk" \
@@ -38,7 +38,9 @@ ENV JAVA_HOME="/opt/jdk" \
 RUN apk add -U --no-cache -t dev curl && mkdir /opt \
     && curl -sLH 'Cookie: oraclelicense=accept-securebackup-cookie' \
     ${JAVA_URL}/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jdk-8u121-linux-x64.tar.gz \
-    | tar zx -C /opt && mv /opt/jdk1.8.0_121 ${JAVA_HOME}
+    | tar zx -C /opt && mv /opt/jdk1.8.0_121 ${JAVA_HOME} \
+    && sed -i s/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=10/ \
+    ${JAVA_HOME}/jre/lib/security/java.security && chown -R root:root ${JAVA_HOME}
 
 #------------------------------------------------------------------------------
 # Install marathon:
@@ -57,16 +59,28 @@ RUN apk add -U --no-cache -t dev git perl && apk add -U --no-cache bash grep \
 RUN cd marathon \
     && sbt -Dsbt.log.format=false 'set test in assembly := {}' assembly \
     && ./bin/build-distribution && mv target/marathon-runnable.jar \
-    /usr/bin/marathon && chmod +x /usr/bin/marathon
+    /usr/bin/marathon && chmod +x /usr/bin/marathon && rm -rf /marathon
 
 COPY rootfs /
+
+#------------------------------------------------------------------------------
+# Strip JDK into JRE:
+#------------------------------------------------------------------------------
+
+RUN find /opt/jdk -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf \
+    && cd /opt/jdk && ln -s ./jre/bin ./bin && cd /opt/jdk/jre && rm -rf \
+    plugin bin/javaws bin/jjs bin/orbd bin/pack200 bin/policytool bin/rmid \
+    bin/rmiregistry bin/servertool bin/tnameserv bin/unpack200 lib/javaws.jar \
+    lib/deploy* lib/desktop lib/*javafx* lib/*jfx* lib/amd64/libdecora_sse.so \
+    lib/amd64/libprism_*.so lib/amd64/libfxplugins.so lib/amd64/libglass.so \
+    lib/amd64/libgstreamer-lite.so lib/amd64/libjavafx*.so lib/amd64/libjfx*.so \
+    lib/ext/jfxrt.jar lib/ext/nashorn.jar lib/oblique-fonts lib/plugin.jar
 
 #------------------------------------------------------------------------------
 # Pre-squash cleanup:
 #------------------------------------------------------------------------------
 
-RUN apk del --purge dev \
-    && rm -rf /var/cache/apk/* /tmp/* /marathon ~/.sbt ~/.ivy2
+RUN apk del --purge dev && rm -rf /var/cache/apk/* /tmp/* ~/.sbt ~/.ivy2
 
 #------------------------------------------------------------------------------
 # Entrypoint:
