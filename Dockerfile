@@ -46,7 +46,7 @@ RUN apk add -U --no-cache -t dev curl && mkdir /opt \
 # Install marathon:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.4.0-RC8" \
+ENV TAG="1.4.0" \
     SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch"
 
 RUN apk add -U --no-cache -t dev git perl && apk add -U --no-cache bash grep \
