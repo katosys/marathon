@@ -37,8 +37,8 @@ ENV JAVA_HOME="/opt/jdk" \
 
 RUN apk add -U --no-cache -t dev curl && mkdir /opt \
     && curl -sLH 'Cookie: oraclelicense=accept-securebackup-cookie' \
-    ${JAVA_URL}/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jdk-8u121-linux-x64.tar.gz \
-    | tar zx -C /opt && mv /opt/jdk1.8.0_121 ${JAVA_HOME} \
+    ${JAVA_URL}/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz \
+    | tar zx -C /opt && mv /opt/jdk1.8.0_131 ${JAVA_HOME} \
     && sed -i s/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=10/ \
     ${JAVA_HOME}/jre/lib/security/java.security && chown -R root:root ${JAVA_HOME}
 
