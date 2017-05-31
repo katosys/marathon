@@ -53,7 +53,7 @@ RUN apk add -U --no-cache -t dev git perl && apk add -U --no-cache bash grep \
     && git clone https://github.com/mesosphere/marathon.git && cd marathon \
     && { [ "${TAG}" != "master" ] && git checkout tags/v${TAG} -b build; }; \
     eval $(sed s/sbt.version/SBT_VERSION/ < project/build.properties) \
-    && wget -P /usr/local/bin ${SBT_URL}/${SBT_VERSION}/sbt-launch.jar \
+    && curl -Lo /usr/local/bin/sbt-launch.jar ${SBT_URL}/${SBT_VERSION}/sbt-launch.jar \
     && cp project/sbt /usr/local/bin && chmod +x /usr/local/bin/sbt
 
 RUN cd marathon \
