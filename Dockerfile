@@ -37,8 +37,8 @@ ENV JAVA_HOME="/opt/jdk" \
 
 RUN apk add -U --no-cache -t dev curl && mkdir /opt \
     && curl -sLH 'Cookie: oraclelicense=accept-securebackup-cookie' \
-    ${JAVA_URL}/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz \
-    | tar zx -C /opt && mv /opt/jdk1.8.0_131 ${JAVA_HOME} \
+    ${JAVA_URL}/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz \
+    | tar zx -C /opt && mv /opt/jdk1.8.0_144 ${JAVA_HOME} \
     && sed -i s/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=10/ \
     ${JAVA_HOME}/jre/lib/security/java.security && chown -R root:root ${JAVA_HOME}
 
@@ -46,7 +46,7 @@ RUN apk add -U --no-cache -t dev curl && mkdir /opt \
 # Install marathon:
 #------------------------------------------------------------------------------
 
-ENV TAG="1.4.5" \
+ENV TAG="1.4.7" \
     SBT_URL="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch"
 
 RUN apk add -U --no-cache -t dev git perl && apk add -U --no-cache bash grep \
